@@ -8,6 +8,7 @@ class IvCalculator:
     STAT_DEF_IV = 'def_iv'
     STAT_STAM_IV = 'stam_iv'
     STAT_LEVEL = 'level'
+    PERFECTION_PERCENTAGE = 'perfection'
 
     def __init__(self):
         self.cp_multipliers = cp_multipliers.CpMultipliers()
@@ -59,7 +60,9 @@ class IvCalculator:
                                 self.STAT_ATK_IV: atk_iv,
                                 self.STAT_STAM_IV: stam_iv,
                                 self.STAT_DEF_IV: def_iv,
-                                self.STAT_LEVEL: level_double/2.0
+                                self.STAT_LEVEL: level_double/2.0,
+                                self.PERFECTION_PERCENTAGE:
+                                    self._calculate_perfection_percentage(atk_iv=atk_iv, def_iv=def_iv, stam_iv=stam_iv)
                             })
 
         return possible_stats
@@ -80,6 +83,9 @@ class IvCalculator:
              cp_multiplier ** 2
         )/ 10.0)
         return max(10, derived_cp) == cp
+
+    def _calculate_perfection_percentage(self, atk_iv, def_iv, stam_iv):
+        return '%.1f' % ((atk_iv + def_iv + stam_iv) / 45.0 * 100)
 
     def _validate_inputs(self, pokemon_name, current_cp, current_health, dust_to_upgrade, powered):
         # TODO, add validations such as ensuring name in self.poke_data

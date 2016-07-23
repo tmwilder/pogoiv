@@ -18,7 +18,7 @@ class TestIv(unittest.TestCase):
             dust_to_upgrade=1300,
             powered=False
         )
-        self.assertEquals([{'atk_iv': 15, 'def_iv': 15, 'stam_iv': 2, 'level': 11.0}], result)
+        self.assertEquals([{'atk_iv': 15, 'def_iv': 15, 'stam_iv': 2, 'level': 11.0, 'perfection': '71.1'}], result)
 
     def test_calculate_iv_slowbro(self):
         calculator = IvCalculator()
@@ -29,4 +29,3 @@ class TestIv(unittest.TestCase):
             dust_to_upgrade=3000,
             powered=True
         )
-        import pprint; pprint.pprint(result)
