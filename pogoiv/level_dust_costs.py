@@ -25,5 +25,5 @@ class LevelDustCosts:
         :param dust_cost: Integer representing the upgrade cost in dust for the pokemon.
         :return: (integer, integer) representing the lowest and high possible levels for the pokemon.
         """
-        max_level = self._stats[dust_cost]
-        return (max(1, max_level - 2), max_level)
+        min_level = self._stats[dust_cost]
+        return (float(min_level), min_level + 1.5)

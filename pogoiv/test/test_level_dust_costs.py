@@ -1,15 +1,15 @@
 import unittest
-from pogoiv.cp_multipliers import CpMultipliers
+from pogoiv.level_dust_costs import LevelDustCosts
 
 
 class TestLevelDustCosts(unittest.TestCase):
-    def tests_get_multiplier(self):
-        base_stats = CpMultipliers()
-        multiplier = base_stats.get_cp_multiplier(10)
-        self.assertEquals(0.4225, multiplier)
+    def tests_get_low_range(self):
+        level_dust_costs = LevelDustCosts()
+        level_range = level_dust_costs.get_level_range(200)
+        self.assertEquals((1, 2.5), level_range)
 
-    def tests_get_multiplier_odd(self):
-        base_stats = CpMultipliers()
-        multiplier = base_stats.get_cp_multiplier(10.5)
-        self.assertEquals(0.4335117, multiplier)
+    def tests_get_average_range(self):
+        level_dust_costs = LevelDustCosts()
+        level_range = level_dust_costs.get_level_range(3000)
+        self.assertEquals((21, 22.5), level_range)
 

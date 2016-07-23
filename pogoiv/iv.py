@@ -22,6 +22,7 @@ class IvCalculator:
         base_stam = base_stats[self.base_stats.BASE_STAMINA]
 
         min_level, max_level = self.level_dust_costs.get_level_range(dust_to_upgrade)
+        print(min_level, max_level)
 
         possible_stats = []
 
@@ -29,7 +30,8 @@ class IvCalculator:
         for atk_iv in range(0, 16):
             for def_iv in range(0, 16):
                 for stam_iv in range(0, 16):
-                    for level_double in range(min_level*2 + 1, max_level*2 + 1):
+                    for level_double in range(int(min_level*2 + 1), int(max_level*2 + 1)):
+                        print level_double/2.0
                         cp_multiplier = self.cp_multipliers.get_cp_multiplier(level_double/2.0)
 
                         hp_ok = self._hp_checks_out(
