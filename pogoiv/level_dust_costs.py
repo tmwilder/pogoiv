@@ -26,4 +26,4 @@ class LevelDustCosts:
         :return: (integer, integer) representing the lowest and high possible levels for the pokemon.
         """
         max_level = self._stats[dust_cost]
-        return (max_level - 2, max_level)
+        return (max(1, max_level - 2), max_level)
