@@ -15,7 +15,22 @@ class IvCalculator:
         self.base_stats = base_stats.BaseStats()
         self.level_dust_costs = level_dust_costs.LevelDustCosts()
 
-    def calculate_iv(self, pokemon_name, current_cp, current_health, dust_to_upgrade, powered=False):
+    def get_ivs(self, pokemon_name, current_cp, current_health, dust_to_upgrade, powered=False):
+        """
+        :param string pokemon_name: name of a Pokemon.
+        :param integer current_cp: CP of Pokemon visible in game client.
+        :param integer current_health: Health of Pokemon visible in game client.
+        :param integer dust_to_upgrade: Amount of dust to buy the next powerup to the Pokemon visible in the game client.
+        :param boolean powered: Whether or not the Pokemon has ever been powered up.
+        :return: dict of the form:
+                {
+                    'atk_iv': integer - 0-15,
+                    'def_iv': integer - 0-15,
+                    'stam_iv': integer - 0-15,
+                    'level': float - 1.0-40.5,
+                    'perfection': float - 0.0 - 100.0
+                }
+        """
         self._validate_inputs(pokemon_name, current_cp, current_health, dust_to_upgrade, powered)
         base_stats = self.base_stats.get_base_stats(pokemon_name)
         base_atk = base_stats[self.base_stats.BASE_ATTACK]
@@ -31,7 +46,7 @@ class IvCalculator:
             for def_iv in range(0, 16):
                 for stam_iv in range(0, 16):
                     for level_double in range(int(min_level*2), int(max_level*2 + 1)):
-                        if (powered is False and not self._legal_unpowered_level(level_double/2.0)):
+                        if powered is False and not self._legal_unpowered_level(level_double/2.0):
                             # Unpowered pokemon can only be odd leveled, skip.
                             continue
 
@@ -67,6 +82,46 @@ class IvCalculator:
 
         return possible_stats
 
+    def get_ivs_across_powerups(self, pokemon_name, powerup_stats):
+        """
+        Returns all possible ivs for the given Pokemon and series of client facing stats for that Pokemon.
+        :param string pokemon_name: name of a Pokemon.
+        :param list<tuple> powerup_stats: List of tuples of the form:
+                (integer current_cp, integer current_health, integer dust_to_upgrade, boolean powered)
+                each representing the input stats for a pokemon at a given level.
+        :return: list<dict> whose members are of the form:
+                {
+                    'atk_iv': integer - 0-15,
+                    'def_iv': integer - 0-15,
+                    'stam_iv': integer - 0-15,
+                    'level': float - 1.0-40.5,
+                    'perfection': float - 0.0 - 100.0
+                }
+        """
+        answer_sets = []
+        for stats in powerup_stats:
+            current_cp, current_health, dust_to_upgrade, powered = stats
+            ivs = self.get_ivs(
+                pokemon_name=pokemon_name,
+                current_cp=current_cp,
+                current_health=current_health,
+                dust_to_upgrade=dust_to_upgrade,
+                powered=powered
+            )
+            answer_sets.append(ivs)
+
+        if not answer_sets or not answer_sets[0]:
+            return []
+        else:
+            tupled_answer_sets = self._tupleify(answer_sets)
+            setted_answer_sets = [set(ivs) for ivs in tupled_answer_sets]
+
+            remaining_options = setted_answer_sets[0]
+            for possible_ivs in setted_answer_sets[1:-1]:
+                remaining_options = remaining_options.union(possible_ivs)
+
+            return self._detupleify(remaining_options)
+
     def _legal_unpowered_level(self, level):
         """ Only odd levels are legal for unpowered pokemon."""
         return level % 2 == 1
@@ -85,7 +140,15 @@ class IvCalculator:
         return max(10, derived_cp) == cp
 
     def _calculate_perfection_percentage(self, atk_iv, def_iv, stam_iv):
-        return '%.1f' % ((atk_iv + def_iv + stam_iv) / 45.0 * 100)
+        return float('%.1f' % ((atk_iv + def_iv + stam_iv) / 45.0 * 100))
+
+    @classmethod
+    def _tupleify(cls, result_list):
+        return sorted([sorted(poke_dict.items()) for poke_dict in result_list])
+
+    @classmethod
+    def _detupleify(cls, result_tuples):
+        return [dict(poke_tuples) for poke_tuples in result_tuples]
 
     def _validate_inputs(self, pokemon_name, current_cp, current_health, dust_to_upgrade, powered):
         # TODO, add validations such as ensuring name in self.poke_data
