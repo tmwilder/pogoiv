@@ -22,7 +22,6 @@ class IvCalculator:
         base_stam = base_stats[self.base_stats.BASE_STAMINA]
 
         min_level, max_level = self.level_dust_costs.get_level_range(dust_to_upgrade)
-        print(min_level, max_level)
 
         possible_stats = []
 
@@ -30,8 +29,11 @@ class IvCalculator:
         for atk_iv in range(0, 16):
             for def_iv in range(0, 16):
                 for stam_iv in range(0, 16):
-                    for level_double in range(int(min_level*2 + 1), int(max_level*2 + 1)):
-                        print level_double/2.0
+                    for level_double in range(int(min_level*2), int(max_level*2 + 1)):
+                        if (powered is False and not self._legal_unpowered_level(level_double/2.0)):
+                            # Unpowered pokemon can only be odd leveled, skip.
+                            continue
+
                         cp_multiplier = self.cp_multipliers.get_cp_multiplier(level_double/2.0)
 
                         hp_ok = self._hp_checks_out(
@@ -61,6 +63,10 @@ class IvCalculator:
                             })
 
         return possible_stats
+
+    def _legal_unpowered_level(self, level):
+        """ Only odd levels are legal for unpowered pokemon."""
+        return level % 2 == 1
 
     def _hp_checks_out(self, hp, base_stam, stam_iv, cp_multiplier):
         derived_hp = floor((base_stam + stam_iv) * cp_multiplier)
