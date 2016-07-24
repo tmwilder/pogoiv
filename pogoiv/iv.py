@@ -1,15 +1,10 @@
 from math import floor
 
 from pogoiv import cp_multipliers, base_stats, level_dust_costs
+from pogoiv.iv_stats import IvStats
 
 
 class IvCalculator:
-    STAT_ATK_IV = 'atk_iv'
-    STAT_DEF_IV = 'def_iv'
-    STAT_STAM_IV = 'stam_iv'
-    STAT_LEVEL = 'level'
-    PERFECTION_PERCENTAGE = 'perfection'
-
     def __init__(self):
         self.cp_multipliers = cp_multipliers.CpMultipliers()
         self.base_stats = base_stats.BaseStats()
@@ -72,11 +67,11 @@ class IvCalculator:
 
                         if hp_ok and cp_ok:
                             possible_stats.append({
-                                self.STAT_ATK_IV: atk_iv,
-                                self.STAT_STAM_IV: stam_iv,
-                                self.STAT_DEF_IV: def_iv,
-                                self.STAT_LEVEL: level_double/2.0,
-                                self.PERFECTION_PERCENTAGE:
+                                IvStats.STAT_ATK_IV: atk_iv,
+                                IvStats.STAT_STAM_IV: stam_iv,
+                                IvStats.STAT_DEF_IV: def_iv,
+                                IvStats.STAT_LEVEL: level_double/2.0,
+                                IvStats.PERFECTION_PERCENTAGE:
                                     self._calculate_perfection_percentage(atk_iv=atk_iv, def_iv=def_iv, stam_iv=stam_iv)
                             })
 
@@ -113,14 +108,15 @@ class IvCalculator:
         if not answer_sets or not answer_sets[0]:
             return []
         else:
-            tupled_answer_sets = self._tupleify(answer_sets)
-            setted_answer_sets = [set(ivs) for ivs in tupled_answer_sets]
-
+            setted_answer_sets = [set(self._make_hashable(answer_set)) for answer_set in answer_sets]
             remaining_options = setted_answer_sets[0]
-            for possible_ivs in setted_answer_sets[1:-1]:
-                remaining_options = remaining_options.union(possible_ivs)
+            for possible_ivs in setted_answer_sets[1:]:
+                remaining_options = remaining_options.intersection(possible_ivs)
 
-            return self._detupleify(remaining_options)
+            response = []
+            for iv_stat_instance in remaining_options:
+                response.append(iv_stat_instance.as_dict())
+            return response
 
     def _legal_unpowered_level(self, level):
         """ Only odd levels are legal for unpowered pokemon."""
@@ -143,12 +139,14 @@ class IvCalculator:
         return float('%.1f' % ((atk_iv + def_iv + stam_iv) / 45.0 * 100))
 
     @classmethod
-    def _tupleify(cls, result_list):
-        return sorted([sorted(poke_dict.items()) for poke_dict in result_list])
-
-    @classmethod
-    def _detupleify(cls, result_tuples):
-        return [dict(poke_tuples) for poke_tuples in result_tuples]
+    def _make_hashable(cls, result_list):
+        return [IvStats(
+            level=poke_dict[IvStats.STAT_LEVEL],
+            atk_iv=poke_dict[IvStats.STAT_ATK_IV],
+            def_iv=poke_dict[IvStats.STAT_DEF_IV],
+            stam_iv=poke_dict[IvStats.STAT_STAM_IV],
+            perfection=poke_dict[IvStats.PERFECTION_PERCENTAGE]
+        ) for poke_dict in result_list]
 
     def _validate_inputs(self, pokemon_name, current_cp, current_health, dust_to_upgrade, powered):
         # TODO, add validations such as ensuring name in self.poke_data
