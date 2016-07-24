@@ -13,5 +13,9 @@ setup(
     package_data={'pogoiv': ['data/*.tsv']},
     test_suite='nose.collector',
     tests_require=['nose'],
+    install_requires=['prettytable'],
+    entry_points={
+        'console_scripts': ['pogoiv=pogoiv.cli:main'],
+    },
     zip_safe=False
 )

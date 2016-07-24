@@ -119,8 +119,8 @@ class IvCalculator:
             return response
 
     def _legal_unpowered_level(self, level):
-        """ Only odd levels are legal for unpowered pokemon."""
-        return level % 2 == 1
+        """ Only whole number levels are legal for unpowered pokemon."""
+        return level % 1 == 0
 
     def _hp_checks_out(self, hp, base_stam, stam_iv, cp_multiplier):
         derived_hp = floor((base_stam + stam_iv) * cp_multiplier)
