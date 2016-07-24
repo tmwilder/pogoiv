@@ -1,6 +1,9 @@
 import csv
 from StringIO import StringIO
+
 from pkg_resources import resource_string
+
+from pogoiv.poke_data_error import PokeDataError
 
 
 class LevelDustCosts:
@@ -25,5 +28,10 @@ class LevelDustCosts:
         :param dust_cost: Integer representing the upgrade cost in dust for the pokemon.
         :return: (integer, integer) representing the lowest and high possible levels for the pokemon.
         """
+        self.validate_dust_cost(dust_cost)
         min_level = self._stats[dust_cost]
         return (float(min_level), min_level + 1.5)
+
+    def validate_dust_cost(self, dust_cost):
+        if dust_cost not in self._stats:
+            raise PokeDataError("Could not find dust cost matching: {}".format(dust_cost))

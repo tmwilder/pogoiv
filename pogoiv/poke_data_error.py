@@ -1,0 +1,2 @@
+class PokeDataError(ValueError):
+    pass

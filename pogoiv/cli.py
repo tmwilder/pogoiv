@@ -4,6 +4,7 @@ from os import linesep
 from prettytable import PrettyTable
 
 from pogoiv.iv_calculator import IvCalculator, IvStats
+from pogoiv.poke_data_error import PokeDataError
 
 
 def collate_args(combat_powers, hitpoints, dust_costs, powered):
@@ -67,10 +68,12 @@ def main():
     args = parser.parse_args()
 
     calculator = IvCalculator()
-    possible_ivs = calculator.get_ivs_across_powerups(
-        args.pokemon,
-        collate_args(args.cp, args.hp, args.d, [str2bool(bool_str) for bool_str in args.powered])
-    )
-
-    pretty_possible_ivs = get_pretty_table(possible_ivs)
-    print pretty_possible_ivs
+    try:
+        possible_ivs = calculator.get_ivs_across_powerups(
+            args.pokemon,
+            collate_args(args.cp, args.hp, args.d, [str2bool(bool_str) for bool_str in args.powered])
+        )
+        pretty_possible_ivs = get_pretty_table(possible_ivs)
+        print pretty_possible_ivs
+    except PokeDataError as pde:
+        print pde

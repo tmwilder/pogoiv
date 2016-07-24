@@ -1,6 +1,6 @@
 from math import floor
 
-from pogoiv import cp_multipliers, base_stats, level_dust_costs
+from pogoiv import cp_multipliers, base_stats, level_dust_costs, poke_data_error
 from pogoiv.iv_stats import IvStats
 
 
@@ -149,5 +149,13 @@ class IvCalculator:
         ) for poke_dict in result_list]
 
     def _validate_inputs(self, pokemon_name, current_cp, current_health, dust_to_upgrade, powered):
-        # TODO, add validations such as ensuring name in self.poke_data
-        pass
+        self.base_stats.validate_pokemon(pokemon_name)
+        self.level_dust_costs.validate_dust_cost(dust_to_upgrade)
+        if not isinstance(current_cp, int):
+            raise poke_data_error.PokeDataError("Input CP was not an integer: {}".format(current_cp))
+        if not isinstance(current_health, int):
+            raise poke_data_error.PokeDataError("Input health was not an integer: {}".format(current_cp))
+        if not isinstance(dust_to_upgrade, int):
+            raise poke_data_error.PokeDataError("Input upgrade cost was not an integer: {}".format(current_cp))
+        if not isinstance(powered, bool):
+            raise poke_data_error.PokeDataError("Input powered status was not a bool: {}".format(current_cp))

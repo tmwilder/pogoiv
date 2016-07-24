@@ -2,6 +2,7 @@ import csv
 from StringIO import StringIO
 from pkg_resources import resource_string
 
+from pogoiv.poke_data_error import PokeDataError
 
 class BaseStats:
     BASE_ATTACK = 'base_attack'
@@ -29,4 +30,9 @@ class BaseStats:
         return stats
 
     def get_base_stats(self, pokemon_name):
+        self.validate_pokemon(pokemon_name)
         return self._stats[pokemon_name.lower()]
+
+    def validate_pokemon(self, pokemon_name):
+        if pokemon_name.lower() not in self._stats:
+            raise PokeDataError("Could not find Pokemon matching: {}".format(pokemon_name))
