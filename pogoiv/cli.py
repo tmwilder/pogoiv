@@ -3,7 +3,7 @@ from os import linesep
 
 from prettytable import PrettyTable
 
-from pogoiv.iv import IvCalculator, IvStats
+from pogoiv.iv_calculator import IvCalculator, IvStats
 
 
 def collate_args(combat_powers, hitpoints, dust_costs, powered):

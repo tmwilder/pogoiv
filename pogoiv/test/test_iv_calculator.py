@@ -1,6 +1,6 @@
 import unittest
 
-from pogoiv.iv import IvCalculator
+from pogoiv.iv_calculator import IvCalculator
 
 
 class TestIv(unittest.TestCase):
