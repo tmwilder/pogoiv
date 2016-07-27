@@ -1,6 +1,4 @@
-import csv
-from StringIO import StringIO
-from pkg_resources import resource_string
+from pogoiv.data import get_csv
 
 
 class CpMultipliers:
@@ -8,9 +6,7 @@ class CpMultipliers:
         self._stats = self._load_stats()
 
     def _load_stats(self):
-        contents = resource_string('pogoiv', 'data/cp_multipliers.tsv')
-        f = StringIO(contents)
-        reader = csv.reader(f, delimiter='\t')
+        reader = get_csv('cp_multipliers.tsv')
 
         stats = {}
         for index, row in enumerate(reader):

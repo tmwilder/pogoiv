@@ -1,7 +1,4 @@
-import csv
-from StringIO import StringIO
-
-from pkg_resources import resource_string
+from pogoiv.data import get_csv
 
 from pogoiv.poke_data_error import PokeDataError
 
@@ -11,9 +8,7 @@ class LevelDustCosts:
         self._stats = self._load_stats()
 
     def _load_stats(self):
-        contents = resource_string('pogoiv', 'data/level_dust_costs.tsv')
-        f = StringIO(contents)
-        reader = csv.reader(f, delimiter='\t')
+        reader = get_csv('level_dust_costs.tsv')
 
         stats = {}
         for index, row in enumerate(reader):
