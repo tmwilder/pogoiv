@@ -9,7 +9,7 @@ from pogoiv.poke_data_error import PokeDataError
 
 def collate_args(combat_powers, hitpoints, dust_costs, powered):
     if powered is None:
-        powered = [True for True in len(dust_costs)]
+        powered = [True for _ in dust_costs]
     return zip(combat_powers, hitpoints, dust_costs, powered)
 
 
@@ -29,7 +29,7 @@ def get_pretty_table(possible_ivs):
              possible_iv[IvStats.PERFECTION_PERCENTAGE]
         ])
     # Sort by completion %.
-    rows = sorted(rows, lambda x, y: 0 if x[4] == y[4] else (-1 if x[4] < y[4] else 1))
+    rows = sorted(rows, key=lambda x: x[4])
 
     for row in rows:
         t.add_row(row)
@@ -74,6 +74,6 @@ def main():
             collate_args(args.cp, args.hp, args.d, [str2bool(bool_str) for bool_str in args.powered])
         )
         pretty_possible_ivs = get_pretty_table(possible_ivs)
-        print pretty_possible_ivs
+        print(pretty_possible_ivs)
     except PokeDataError as pde:
-        print pde
+        print(pde)

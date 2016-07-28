@@ -25,7 +25,7 @@ class IvStats:
             atk_iv=self._atk_iv,
             def_iv=self._def_iv,
             stam=self._stam_iv
-        ))
+        ).encode('ascii'))
         return int(md5.hexdigest(), 16)
 
     def as_dict(self):
