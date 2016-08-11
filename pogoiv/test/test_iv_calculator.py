@@ -27,11 +27,7 @@ class TestIv(unittest.TestCase):
             {'level': 22.0, 'atk_iv': 9, 'def_iv': 13, 'stam_iv': 12, 'perfection': 75.6}
         ]
 
-    def test_hp_checks_out(self):
-        pass
-
-    def test_cp_checks_out(self):
-        pass
+        cls.bulba_data_t1 = [{'atk_iv': 15, 'def_iv': 15, 'stam_iv': 15, 'perfection': 100.0, 'level': 10.5}]
 
     def test_calculate_iv_eevee(self):
         calculator = IvCalculator()
@@ -54,6 +50,17 @@ class TestIv(unittest.TestCase):
             powered=True
         )
         self._compare_result_lists(self.slowbro_data_t1, actual)
+
+    def test_get_ivs_bulbasaur_edge_case(self):
+        calculator = IvCalculator()
+        actual = calculator.get_ivs(
+            pokemon_name='Bulbasaur',
+            current_cp=321,
+            current_health=45,
+            dust_to_upgrade=1000,
+            powered=True
+        )
+        self._compare_result_lists(self.bulba_data_t1, actual)
 
     def test_get_ivs_slowbro_across_powerups(self):
         calculator = IvCalculator()

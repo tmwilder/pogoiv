@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pogoiv',
-    version='1.0.1',
+    version='1.0.2',
     description='Library for calculating possible pokemon GO IVs.',
     url='http://github.com/tmwilder/pogoiv',
     author='Tim Wilder',
