@@ -1,3 +1,4 @@
+from __future__ import unicode_literals
 from pogoiv.data import get_csv
 
 from pogoiv.poke_data_error import PokeDataError
@@ -18,7 +19,7 @@ class BaseStats:
             if index == 0:
                 continue
             name, attack, defense, stamina = row
-            stats[name.lower()] = {
+            stats[self._utf8ify(name.lower())] = {
                 self.BASE_ATTACK: int(attack),
                 self.BASE_DEFENSE: int(defense),
                 self.BASE_STAMINA: int(stamina)
@@ -27,8 +28,13 @@ class BaseStats:
 
     def get_base_stats(self, pokemon_name):
         self.validate_pokemon(pokemon_name)
-        return self._stats[pokemon_name.lower()]
+        return self._stats[self._utf8ify(pokemon_name.lower())]
+
+    def _utf8ify(self, input_string):
+        if not isinstance(input_string, unicode):
+            input_string = input_string.decode('utf-8')
+        return input_string
 
     def validate_pokemon(self, pokemon_name):
-        if pokemon_name.lower() not in self._stats:
+        if self._utf8ify(pokemon_name.lower()) not in self._stats:
             raise PokeDataError("Could not find Pokemon matching: {}".format(pokemon_name))
