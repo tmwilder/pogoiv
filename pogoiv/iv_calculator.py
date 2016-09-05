@@ -100,6 +100,20 @@ class IvCalculator:
                 if not min_iv_range <= response_set['stam_iv'] <= max_iv_range:
                     coherent_response = False
 
+            # Additional checks.
+            if (atk_is_best == def_is_best == True) and (response_set['atk_iv'] != response_set['def_iv']):
+                coherent_response = False
+            if (atk_is_best == stam_is_best == True) and (response_set['atk_iv'] != response_set['stam_iv']):
+                coherent_response = False
+            if (def_is_best == stam_is_best == True) and (response_set['def_iv'] != response_set['stam_iv']):
+                coherent_response = False
+            if (atk_is_best != def_is_best) and (response_set['atk_iv'] == response_set['def_iv']):
+                coherent_response = False
+            if (atk_is_best != stam_is_best) and (response_set['atk_iv'] == response_set['stam_iv']):
+                coherent_response = False
+            if (def_is_best != stam_is_best) and (response_set['def_iv'] == response_set['stam_iv']):
+                coherent_response = False
+
             if coherent_response:
                 filtered_response.append(response_set)
 
