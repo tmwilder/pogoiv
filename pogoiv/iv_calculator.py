@@ -77,13 +77,45 @@ class IvCalculator:
 
         return possible_stats
 
-    def get_ivs_across_powerups(self, pokemon_name, powerup_stats):
+    def appraisal_filter(self, response, appraisal):
+        filtered_response = []
+	""" Filters the resulting iv set according to the appraisal values. """
+        """ Global appraisal ranges. """
+	percentajes = [(0.0,48.9), (51.1,64.4), (66.7,80.0), (82.2,100.0)]
+        min_percentaje = percentajes[appraisal[0]][0]
+        max_percentaje = percentajes[appraisal[0]][1]
+        """ Individual stat appraisal ranges. """
+	ranges = [(0,7), (8,12), (13,14), (15,15)]
+        min_range = ranges[appraisal[1]][0]
+        max_range = ranges[appraisal[1]][1]
+
+        for response_set in response:
+            coherent_response = True
+            if not min_percentaje <= response_set['perfection'] <= max_percentaje:
+                coherent_response = False
+            if appraisal[2]:
+                if not min_range <= response_set['atk_iv'] <= max_range:
+                    coherent_response = False
+            if appraisal[3]:
+                if not min_range <= response_set['def_iv'] <= max_range:
+                    coherent_response = False
+            if appraisal[4]:
+                if not min_range <= response_set['stam_iv'] <= max_range:
+                    coherent_response = False
+
+            if coherent_response:
+                filtered_response.append(response_set)
+
+        return filtered_response
+
+    def get_ivs_across_powerups(self, pokemon_name, powerup_stats, appraisal=0):
         """
         Returns all possible ivs for the given Pokemon and series of client facing stats for that Pokemon.
         :param string pokemon_name: name of a Pokemon.
         :param list<tuple> powerup_stats: List of tuples of the form:
                 (integer current_cp, integer current_health, integer dust_to_upgrade, boolean powered)
                 each representing the input stats for a pokemon at a given level.
+        :param list appraisal: (integer global_appraisal, integer stat_appraisal, boolean atk, boolean def, boolean sta)
         :return: list<dict> whose members are of the form:
                 {
                     'atk_iv': integer - 0-15,
@@ -116,6 +148,10 @@ class IvCalculator:
             response = []
             for iv_stat_instance in remaining_options:
                 response.append(iv_stat_instance.as_dict())
+
+            if appraisal != 0:
+	        response = self.appraisal_filter(response, appraisal)
+
             return response
 
     def _legal_unpowered_level(self, level):
