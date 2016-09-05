@@ -90,7 +90,6 @@ def main():
         appraisal.append(str2bool(args.at))
         appraisal.append(str2bool(args.de))
         appraisal.append(str2bool(args.st))
-    print appraisal
 
     calculator = IvCalculator()
     try:
