@@ -57,7 +57,7 @@ Library with appraisal feature:
 
     >>> from pogoiv.iv_calculator import IvCalculator
     >>> calculator = IvCalculator()
-    >>> calculator.get_ivs_across_powerups(pokemon_name='Horsea', powerup_stats=[(10, 10, 200, False), (20, 10, 200, True), (30, 10, 200, True)], appraisal = (1, 3, True, False, False))
+    >>> calculator.get_ivs_across_powerups(pokemon_name='Slowbro', powerup_stats=[(1528, 125, 3000, True), (1564, 126, 3000, True)], appraisal = (2, 1, True, False, False))
     [{'atk_iv': 9, 'def_iv': 13, 'stam_iv': 12, 'perfection': 75.6, 'level': 22.0}]
 
 Appraisal values:
