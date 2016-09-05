@@ -79,13 +79,13 @@ class IvCalculator:
 
     def appraisal_filter(self, response, appraisal):
         filtered_response = []
-	""" Filters the resulting iv set according to the appraisal values. """
+        """ Filters the resulting iv set according to the appraisal values. """
         """ Global appraisal ranges. """
-	percentajes = [(0.0,48.9), (51.1,64.4), (66.7,80.0), (82.2,100.0)]
+        percentajes = [(0.0,48.9), (51.1,64.4), (66.7,80.0), (82.2,100.0)]
         min_percentaje = percentajes[appraisal[0]][0]
         max_percentaje = percentajes[appraisal[0]][1]
         """ Individual stat appraisal ranges. """
-	ranges = [(0,7), (8,12), (13,14), (15,15)]
+        ranges = [(0,7), (8,12), (13,14), (15,15)]
         min_range = ranges[appraisal[1]][0]
         max_range = ranges[appraisal[1]][1]
 
@@ -150,7 +150,7 @@ class IvCalculator:
                 response.append(iv_stat_instance.as_dict())
 
             if appraisal:
-	        response = self.appraisal_filter(response, appraisal)
+                response = self.appraisal_filter(response, appraisal)
 
             return response
 
