@@ -66,13 +66,13 @@ def main():
     parser.add_argument('-p', '--pokemon', required=True, help='Name of the Pokemon')
 
     parser.add_argument(
-        '--a1', '--appraisal1',
+        '--ao', '--appraisal-overall',
         type=int,
         required=False,
         help='Integer from 0 to 3 indicating the global appraisal phrase. 0 the lowest, 3 the highest.'
     )
     parser.add_argument(
-        '--a2', '--appraisal2',
+        '--ap', '--appraisal-stats',
         type=int,
         required=False,
         help='Integer from 0 to 3 indicating the best stat appraisal phrase. 0 the lowest, 3 the highest.'
@@ -84,9 +84,9 @@ def main():
     args = parser.parse_args()
 
     appraisal = []
-    if not (args.a1 == None or args.a2 == None or args.at == None or args.de == None or args.st == None):
-        appraisal.append(args.a1)
-        appraisal.append(args.a2)
+    if not (args.ao == None or args.ap == None or args.at == None or args.de == None or args.st == None):
+        appraisal.append(args.ao)
+        appraisal.append(args.ap)
         appraisal.append(str2bool(args.at))
         appraisal.append(str2bool(args.de))
         appraisal.append(str2bool(args.st))
