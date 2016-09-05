@@ -60,45 +60,51 @@ Library with appraisal feature:
     >>> calculator.get_ivs_across_powerups(pokemon_name='Slowbro', powerup_stats=[(1528, 125, 3000, True), (1564, 126, 3000, True)], appraisal = (2, 1, True, False, False))
     [{'atk_iv': 9, 'def_iv': 13, 'stam_iv': 12, 'perfection': 75.6, 'level': 22.0}]
 
-Appraisal values:
+**Appraisal values:**
 
 Mystic first value
+
 0. Overall, your Pokemon is not likely to make much headway in battle.
 1. Overall, your Pokemon is above average.
 2. Overall, your Pokemon has certainly caught my attention.
 3. Overall, your Pokemon is a wonder! What a breathtaking Pokemon!
 
 Mystic second value
+
 0. Its stats are not out of the norm, in my opinion.
 1. Its stats are noticeably trending to the positive.
 2. I am certainly impressed by its stats, I must say.
 3. Its stats exceed my calculations. It's incredible!
 
 Valor first value
+
 0. Overall, your Pokemon may not be great in battle, but I still like it!
 1. Overall, your Pokemon is a decent Pokemon.
 2. Overall, your Pokemon is a strong Pokemon. You should be proud!
 3. Overall, your Pokemon simply amazes me. It can accomplish anything!
 
 Valor second value
+
 0. Its stats don't point to greatness in battle.
 1. Its stats indicate that in battle, it'll get the job done.
 2. It's got excellent stats! How exciting!
 3. I'm blown away by its stats. WOW!
 
 Instinct first value
+
 0. Overall, your Pokemon has room for improvement as far as battling goes.
 1. Overall, your Pokemon is pretty decent!
 2. Overall, your Pokemon is really strong!
 3. Overall, your Pokemon looks like it can really battle with the best of them!
 
 Instinct second value
+
 0. Its stats are all right, but kinda basic, as far as I can see.
 1. It's definitely got some good stats. Definitely!
 2. Its stats are really strong! Impressive.
 3. Its stats are the best I've ever seen! No doubt about it!
 
-Third, Fourth and Fifth boolean values indicate whether or not the stat (Attack, Defense or Stamina respectively) are the highest of the three. (Several True values mean that several stats have the same highest values).
+Third, fourth and fifth boolean values indicate whether or not the stat (Attack, Defense or Stamina respectively) are the highest of the three. (Several True values mean that several stats have the same highest values).
 
 
 How To Contribute
