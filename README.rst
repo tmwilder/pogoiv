@@ -64,7 +64,7 @@ CLI with appraisal feature:
 
 .. code-block:: bash
 
-    $ pogoiv --dust-cost 3000 3000 --combat-power 1528 1564 --hp 125 126 --powered True True --pokemon Slowbro --a1 2 --a2 1 --at True --de False --st False
+    $ pogoiv --dust-cost 3000 3000 --combat-power 1528 1564 --hp 125 126 --powered True True --pokemon Slowbro --ao 2 --ap 1 --at True --de False --st False
     +-------+--------+--------+---------+--------------+
     | Level | Atk IV | Def IV | Stam IV | Perfection % |
     +-------+--------+--------+---------+--------------+
