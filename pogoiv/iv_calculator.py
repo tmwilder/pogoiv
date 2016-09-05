@@ -149,7 +149,7 @@ class IvCalculator:
             for iv_stat_instance in remaining_options:
                 response.append(iv_stat_instance.as_dict())
 
-            if appraisal != 0:
+            if appraisal:
 	        response = self.appraisal_filter(response, appraisal)
 
             return response
