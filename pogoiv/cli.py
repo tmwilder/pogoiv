@@ -65,13 +65,38 @@ def main():
     parser.add_argument('--powered', nargs="+", choices=["True", "False"], required=True, help='For this data point, has the Pokemon ever been powered?')
     parser.add_argument('-p', '--pokemon', required=True, help='Name of the Pokemon')
 
+    parser.add_argument(
+        '--ao', '--appraisal-overall',
+        type=int,
+        required=False,
+        help='Integer from 0 to 3 indicating the global appraisal phrase. 0 the lowest, 3 the highest.'
+    )
+    parser.add_argument(
+        '--ap', '--appraisal-stats',
+        type=int,
+        required=False,
+        help='Integer from 0 to 3 indicating the best stat appraisal phrase. 0 the lowest, 3 the highest.'
+    )
+    parser.add_argument('--at', choices=["True", "False"], required=False, help='Is attack the best stat?')
+    parser.add_argument('--de', choices=["True", "False"], required=False, help='Is defense the best stat?')
+    parser.add_argument('--st', choices=["True", "False"], required=False, help='Is stamina the best stat?')
+
     args = parser.parse_args()
+
+    appraisal = []
+    if not (args.ao == None or args.ap == None or args.at == None or args.de == None or args.st == None):
+        appraisal.append(args.ao)
+        appraisal.append(args.ap)
+        appraisal.append(str2bool(args.at))
+        appraisal.append(str2bool(args.de))
+        appraisal.append(str2bool(args.st))
 
     calculator = IvCalculator()
     try:
         possible_ivs = calculator.get_ivs_across_powerups(
             args.pokemon,
-            collate_args(args.cp, args.hp, args.d, [str2bool(bool_str) for bool_str in args.powered])
+            collate_args(args.cp, args.hp, args.d, [str2bool(bool_str) for bool_str in args.powered]),
+            appraisal
         )
         pretty_possible_ivs = get_pretty_table(possible_ivs)
         print(pretty_possible_ivs)

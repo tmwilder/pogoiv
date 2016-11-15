@@ -1,4 +1,6 @@
 from __future__ import unicode_literals
+import sys
+
 from pogoiv.data import get_csv
 
 from pogoiv.poke_data_error import PokeDataError
@@ -31,8 +33,9 @@ class BaseStats:
         return self._stats[self._utf8ify(pokemon_name.lower())]
 
     def _utf8ify(self, input_string):
-        if not isinstance(input_string, unicode):
-            input_string = input_string.decode('utf-8')
+        if sys.version_info < (3, 0):
+            if not isinstance(input_string, unicode):
+                input_string = input_string.decode('utf-8')
         return input_string
 
     def validate_pokemon(self, pokemon_name):
